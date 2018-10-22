@@ -10,8 +10,13 @@ of the same category are @Service and @Controller*/
 @Repository
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
+    //find object by using its identifier
+    Project findByProjectIdentifier(String projectId);
 
-    //Iterable or List what Is best?
+
+
+
+    // return all objects
     @Override
-    Iterable<Project> findAllById(Iterable<Long> iterable);
+    Iterable<Project> findAll();
 }

@@ -2,16 +2,14 @@ package com.jonatans.ppmtool.web;
 
 
 import com.jonatans.ppmtool.domain.Project;
+import com.jonatans.ppmtool.services.MapValidationErrorService;
 import com.jonatans.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -40,24 +38,36 @@ public class ProjectController {
     also allows us to add headers and status code.
      */
 
-
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
     /*Specifically, @PostMapping is a composed annotation that acts as a
     shortcut for @RequestMapping(method = RequestMethod.POST).*/
-    @PostMapping("")
     // "?" used for generic type
+    @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result){
 
-        //Traverse trough the getFieldErros and
-        //return the right error messages
-        if(result.hasErrors()){
-            Map<String, String> errorMap = new HashMap<>();
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap!=null) return errorMap;
 
-            for(FieldError error: result.getFieldErrors()){
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }
         Project project1 = projectService.saveOrUpdateProject(project);
         return new ResponseEntity<Project>(project1, HttpStatus.CREATED);
     }
+
+
+
+
+
+    //Controller to get an object by ID
+    @GetMapping("/{projectId}")
+    public ResponseEntity<?> getProjectById(@PathVariable String projectId){
+
+        Project project = projectService.findProjectByIdentifier(projectId);
+
+        return new ResponseEntity<Project>(project, HttpStatus.OK);
+    }
+
+    //Controller to get all Projects
+    @GetMapping("/all")
+    public Iterable<Project> getAllProjects(){return projectService.findAllProjects();}
+
 }
