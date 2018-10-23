@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import Project from "./Project/ProjectItem";
-import "bootstrap/dist/css/bootstrap.min.css";
 import ProjectItem from "./Project/ProjectItem";
+import CreateProjectButton from "./Project/createProjectButton";
 
+//call CreateProjectButton (functional component)
+//call ProjectITEM
 class Dashboard extends Component {
 	render() {
 		return (
@@ -12,12 +13,11 @@ class Dashboard extends Component {
 						<div className="col-md-12">
 							<h1 className="display-4 text-center">Projects</h1>
 							<br />
-							<a href="ProjectForm.html" className="btn btn-lg btn-info">
-								Create a Project
-							</a>
+
+							<CreateProjectButton />
+
 							<br />
 							<hr />
-
 							<ProjectItem />
 						</div>
 					</div>

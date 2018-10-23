@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 class ProjectItem extends Component {
 	render() {
+		//ProjectItem component to show project board, update project, and delete project.
 		return (
 			<div className="container">
 				<div className="card card-body bg-light mb-3">
