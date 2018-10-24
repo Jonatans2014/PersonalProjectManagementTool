@@ -12,7 +12,7 @@ export const createProject = (project, history) => async dispatch => {
 	try {
 		//make an async request to the spring api
 		//use html5 history.push to send back to dashboard
-		const res = await axios.post("/api/project", project);
+		await axios.post("/api/project", project);
 		history.push("/dashboard");
 		//if ok, then dispatch nothing as a error
 
