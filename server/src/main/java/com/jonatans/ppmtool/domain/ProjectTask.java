@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
-
 @Entity
 public class ProjectTask {
 
@@ -20,33 +19,19 @@ public class ProjectTask {
     private String status;
     private Integer priority;
     private Date dueDate;
-
-
     //ManyToOne with Backlog
-    //Cascade.REFRESHER  explnation: A project deleted that is a child to
-    // the a backlog object, this refreshes the backlog and the project task
-    // will no longer exist
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     @JoinColumn(name="backlog_id", updatable = false, nullable = false)
     @JsonIgnore
     private Backlog backlog;
 
     @Column(updatable = false)
-    private String projectIdentifer;
+    private String projectIdentifier;
     private Date create_At;
     private Date update_At;
 
     public ProjectTask() {
     }
-
-    public Backlog getBacklog() {
-        return backlog;
-    }
-
-    public void setBacklog(Backlog backlog) {
-        this.backlog = backlog;
-    }
-
 
     public Long getId() {
         return id;
@@ -104,12 +89,12 @@ public class ProjectTask {
         this.dueDate = dueDate;
     }
 
-    public String getProjectIdentifer() {
-        return projectIdentifer;
+    public String getProjectIdentifier() {
+        return projectIdentifier;
     }
 
-    public void setProjectIdentifer(String projectIdentifer) {
-        this.projectIdentifer = projectIdentifer;
+    public void setProjectIdentifier(String projectIdentifier) {
+        this.projectIdentifier = projectIdentifier;
     }
 
     public Date getCreate_At() {
@@ -126,6 +111,14 @@ public class ProjectTask {
 
     public void setUpdate_At(Date update_At) {
         this.update_At = update_At;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @PrePersist
@@ -148,7 +141,8 @@ public class ProjectTask {
                 ", status='" + status + '\'' +
                 ", priority=" + priority +
                 ", dueDate=" + dueDate +
-                ", projectIdentifer='" + projectIdentifer + '\'' +
+                ", backlog=" + backlog +
+                ", projectIdentifier='" + projectIdentifier + '\'' +
                 ", create_At=" + create_At +
                 ", update_At=" + update_At +
                 '}';
