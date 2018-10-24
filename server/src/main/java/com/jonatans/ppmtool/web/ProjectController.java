@@ -2,6 +2,7 @@ package com.jonatans.ppmtool.web;
 
 
 import com.jonatans.ppmtool.domain.Project;
+import com.jonatans.ppmtool.exception.ProjectIdException;
 import com.jonatans.ppmtool.services.MapValidationErrorService;
 import com.jonatans.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ mapped methods and detects @RequestMapping annotations.*/
   @ResponseBody annotations (see: Javadoc)*/
 @RestController
 @RequestMapping("/api/project")
+@CrossOrigin
 public class ProjectController {
 
     /*@Autowired is an annotation with a completely different meaning: it
@@ -69,5 +71,16 @@ public class ProjectController {
     //Controller to get all Projects
     @GetMapping("/all")
     public Iterable<Project> getAllProjects(){return projectService.findAllProjects();}
+
+
+
+
+    //controller to delete a project by using its PIdentifier
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<?> deleteProject(@PathVariable String projectId){
+        projectService.deleteProjectByIdentifier(projectId);
+
+        return new ResponseEntity<String>("Project with ID: '"+projectId+"' was deleted", HttpStatus.OK);
+    }
 
 }

@@ -65,7 +65,7 @@ class AddProject extends Component {
 		}
 	}
 
-	compo;
+	
 
 	//when any states change then set new state.
 	onChange(e) {
