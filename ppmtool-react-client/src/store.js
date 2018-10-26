@@ -11,27 +11,29 @@ const middleware = [thunk];
 //declare a variable store
 let store;
 
+const ReactReduxDevTools =
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+
 //This is done to work with many browsers
-if (window.navigator.userAgent.includes("Chrome")) {
-	//create store when it indentifies chrome browser
-	//add rootReducer and initialState and apply middleWare
-	store = createStore(
-		rootReducer,
-		initalState,
-		compose(
-			//... is es6 javascript add multiple middleware
-			applyMiddleware(...middleware),
-			//only chrome can take this redux devtool extention, it will be null if used in other browsers.
-			window.__REDUX_DEVTOOLS_EXTENSION__ &&
-				window.__REDUX_DEVTOOLS_EXTENSION__()
-		)
-	);
+if (window.navigator.userAgent.includes("Chrome") && ReactReduxDevTools) {
+  //create store when it indentifies chrome browser
+  //add rootReducer and initialState and apply middleWare
+  store = createStore(
+    rootReducer,
+    initalState,
+    compose(
+      //... is es6 javascript add multiple middleware
+      applyMiddleware(...middleware),
+      //only chrome can take this redux devtool extention, it will be null if used in other browsers.
+      ReactReduxDevTools
+    )
+  );
 } else {
-	store = createStore(
-		rootReducer,
-		initalState,
-		compose(applyMiddleware(...middleware))
-	);
+  store = createStore(
+    rootReducer,
+    initalState,
+    compose(applyMiddleware(...middleware))
+  );
 }
 
 //Export store
