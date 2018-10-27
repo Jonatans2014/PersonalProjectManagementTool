@@ -2,17 +2,10 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import "../../cssFiles/Home.css";
 
-class Landing extends Component {
-  componentDidMount() {
-    if (this.props.security.validToken) {
-      this.props.history.push("/dashboard");
-    }
-  }
-
-  render() {
-    return (
-      <div className="landing">
+/*
+<div className="landing">
         <div className="light-overlay landing-inner text-dark">
           <div className="container">
             <div className="row">
@@ -33,6 +26,37 @@ class Landing extends Component {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+*/
+
+class Landing extends Component {
+  componentDidMount() {
+    if (this.props.security.validToken) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
+  render() {
+    return (
+      <div className="home-container">
+        <div className="container">
+          <div className="graf-bg-container">
+            <div className="graf-layout">
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+              <div className="graf-circle" />
+            </div>
+          </div>
+          <h1 className="home-title"> Project Management Tool</h1>
         </div>
       </div>
     );
