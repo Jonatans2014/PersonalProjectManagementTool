@@ -11,7 +11,7 @@ import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTas
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
-import Login from "./components/UserManagement/Login";
+import Login from "./components/UserManagement/login/Login";
 
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
