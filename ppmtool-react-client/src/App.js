@@ -12,6 +12,10 @@ import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProj
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/login/Login";
+import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
+import { ACCESS_TOKEN } from "./components/constants/index";
+
+import Profile from "./components/UserManagement/profile/Profile";
 
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
@@ -22,7 +26,7 @@ import setJWTToken from "./securityUtils/setJWTToken";
 import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
-
+import PrivateRoute from "./common/PrivateRoute";
 const jwtToken = localStorage.jwtToken;
 
 if (jwtToken) {
@@ -70,6 +74,12 @@ class App extends Component {
                 path="/updateProject/:id"
                 component={UpdateProject}
               />
+              <PrivateRoute
+                path="/profile"
+                authenticated={this.state.authenticated}
+                currentUser={this.state.currentUser}
+                component={Profile}
+              />
               <SecuredRoute
                 exact
                 path="/projectBoard/:id"
@@ -84,6 +94,11 @@ class App extends Component {
                 exact
                 path="/updateProjectTask/:backlog_id/:pt_id"
                 component={UpdateProjectTask}
+              />
+
+              <Route
+                path="/oauth2/redirect"
+                component={OAuth2RedirectHandler}
               />
             </Switch>
           </div>

@@ -5,7 +5,7 @@ import {
   FACEBOOK_AUTH_URL,
   GITHUB_AUTH_URL,
   ACCESS_TOKEN
-} from "../../../constants";
+} from "../../constants";
 import { login } from "../../../util/APIUtils";
 import { Link, Redirect } from "react-router-dom";
 import fbLogo from "../../../img/fb-logo.png";

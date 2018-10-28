@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "aj": "^1.0.3",
+    "ajv": "^6.0.0",
     "axios": "^0.18.0",
     "boostrap": "^2.0.0",
     "classnames": "^2.2.6",
     "git": "^0.1.5",
     "jwt-decode": "^2.2.0",
+    "materialize-css": "^1.0.0-rc.2",
+    "materialize-social": "^1.0.3",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
@@ -19,7 +23,7 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "set PORT=3006 && react-scripts start",
+    "start": "set PORT=3000 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
