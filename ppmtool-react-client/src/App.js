@@ -14,9 +14,12 @@ import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/login/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
-
+import { getCurrentUser } from "./util/APIUtils";
+import Alert from "react-s-alert";
 import Profile from "./components/UserManagement/profile/Profile";
-
+import NotFound from "../src/common/NotFound";
+import AppHeader from "../src/common/AppHeader";
+import Signup from "../src/components/UserManagement/signup/Signup";
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
 //import store
@@ -27,6 +30,7 @@ import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
 import PrivateRoute from "./common/PrivateRoute";
+
 const jwtToken = localStorage.jwtToken;
 
 if (jwtToken) {
@@ -45,11 +49,57 @@ if (jwtToken) {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authenticated: false,
+      currentUser: null,
+      loading: false
+    };
+
+    this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  loadCurrentlyLoggedInUser() {
+    this.setState({
+      loading: true
+    });
+
+    getCurrentUser()
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          authenticated: true,
+          loading: false
+        });
+      })
+      .catch(error => {
+        this.setState({
+          loading: false
+        });
+      });
+  }
+
+  handleLogout() {
+    localStorage.removeItem(ACCESS_TOKEN);
+    this.setState({
+      authenticated: false,
+      currentUser: null
+    });
+    Alert.success("You're safely logged out!");
+  }
+
+  componentDidMount() {
+    this.loadCurrentlyLoggedInUser();
+  }
+
   render() {
     //wrap the entire our entire application with the Provider Tag and declare the store
     //add components with theirs URL.
     //when clicked on addproject, it goes to the add project component
     // and add a new proejct
+
     return (
       <Provider store={store}>
         <Router>
@@ -67,38 +117,29 @@ class App extends Component {
               //Private Routes
             }
             <Switch>
-              <SecuredRoute exact path="/dashboard" component={Dashboard} />
-              <SecuredRoute exact path="/addProject" component={AddProject} />
-              <SecuredRoute
+              <Route exact path="/dashboard" component={Dashboard} />
+              <Route exact path="/addProject" component={AddProject} />
+              <Route
                 exact
                 path="/updateProject/:id"
                 component={UpdateProject}
-              />
-              <PrivateRoute
-                path="/profile"
-                authenticated={this.state.authenticated}
-                currentUser={this.state.currentUser}
-                component={Profile}
-              />
-              <SecuredRoute
-                exact
-                path="/projectBoard/:id"
-                component={ProjectBoard}
-              />
-              <SecuredRoute
-                exact
-                path="/addProjectTask/:id"
-                component={AddProjectTask}
-              />
-              <SecuredRoute
-                exact
-                path="/updateProjectTask/:backlog_id/:pt_id"
-                component={UpdateProjectTask}
               />
 
               <Route
                 path="/oauth2/redirect"
                 component={OAuth2RedirectHandler}
+              />
+
+              <Route exact path="/projectBoard/:id" component={ProjectBoard} />
+              <Route
+                exact
+                path="/addProjectTask/:id"
+                component={AddProjectTask}
+              />
+              <Route
+                exact
+                path="/updateProjectTask/:backlog_id/:pt_id"
+                component={UpdateProjectTask}
               />
             </Switch>
           </div>
