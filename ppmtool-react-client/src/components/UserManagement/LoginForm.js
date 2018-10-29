@@ -1,4 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import classnames from "classnames";
+import { login } from "../../actions/securityAction";
+
 import {
   GOOGLE_AUTH_URL,
   FACEBOOK_AUTH_URL,
@@ -7,45 +12,44 @@ import {
 } from "../constants";
 //import { login } from "../../../util/APIUtils";
 import Alert from "react-s-alert";
-import { login } from "../../util/APIUtils";
+
 class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: ""
+      username: "",
+      password: "",
+      errors: {}
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.security.validToken) {
+      this.props.history.push("/dashboard");
+    }
+  }
+
   handleInputChange(event) {
+    /*
     const target = event.target;
     const inputName = target.name;
     const inputValue = target.value;
+    */
 
-    this.setState({
-      [inputName]: inputValue
-    });
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const loginRequest = Object.assign({}, this.state);
+    const LoginRequest = {
+      username: this.state.username,
+      password: this.state.password
+    };
 
-    login(loginRequest)
-      .then(response => {
-        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-        Alert.success("You're successfully logged in!");
-        this.props.history.push("/");
-      })
-      .catch(error => {
-        Alert.error(
-          (error && error.message) ||
-            "Oops! Something went wrong. Please try again!"
-        );
-      });
+    this.props.login(LoginRequest);
   }
 
   render() {
@@ -54,10 +58,10 @@ class LoginForm extends Component {
         <div className="form-item">
           <input
             type="email"
-            name="email"
+            name="username"
             className="form-control"
             placeholder="Email"
-            value={this.state.email}
+            value={this.state.username}
             onChange={this.handleInputChange}
             required
           />
@@ -75,7 +79,7 @@ class LoginForm extends Component {
         </div>
         <div className="form-item">
           <button type="submit" className="btn btn-block btn-primary">
-            dss
+            Login
           </button>
         </div>
       </form>
@@ -83,4 +87,18 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm;
+LoginForm.propTypes = {
+  login: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  security: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  security: state.security,
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(LoginForm);
