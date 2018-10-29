@@ -12,7 +12,7 @@ import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTas
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/Register";
-import Login from "./components/UserManagement/login/Login";
+import Login from "./components/UserManagement/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
 import LoadingIndicator from "../src/common/LoadingIndicator";
@@ -21,6 +21,7 @@ import Profile from "./components/UserManagement/profile/Profile";
 import NotFound from "../src/common/NotFound";
 import AppHeader from "../src/common/AppHeader";
 import Signup from "../src/components/UserManagement/signup/Signup";
+
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
 //import store
@@ -128,11 +129,13 @@ class App extends Component {
             <Header />
             {
               //Public Routes
+              //check out sign render after
             }
 
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route path="/signup" render={props => <Signup />} />
             <Route path="/profile" component={Dashboard} />
             <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 

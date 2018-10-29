@@ -4,6 +4,11 @@ import { connect } from "react-redux";
 import classnames from "classnames";
 import { login } from "../../actions/securityAction";
 
+import SocialLogin from "./SocialLogin";
+
+import LoginForm from "./LoginForm";
+import { Link, Redirect } from "react-router-dom";
+import "../UserManagement/login/Login.css";
 class Login extends Component {
   constructor() {
     super();
@@ -49,46 +54,17 @@ class Login extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div className="login">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Log In</h1>
-              <form onSubmit={this.onSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.username
-                    })}
-                    placeholder="Email Address"
-                    name="username"
-                    value={this.state.username}
-                    onChange={this.onChange}
-                  />
-                  {errors.username && (
-                    <div className="invalid-feedback">{errors.username}</div>
-                  )}
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className={classnames("form-control form-control-lg", {
-                      "is-invalid": errors.password
-                    })}
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                  {errors.password && (
-                    <div className="invalid-feedback">{errors.password}</div>
-                  )}
-                </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
-              </form>
-            </div>
+      <div className="login-container">
+        <div className="login-content">
+          <h1 className="login-title">Login to SpringSocial</h1>
+          <SocialLogin />
+          <div className="or-separator">
+            <span className="or-text">OR</span>
           </div>
+          <LoginForm />
+          <span className="signup-link">
+            New user? <Link to="/signup">Sign up!</Link>
+          </span>
         </div>
       </div>
     );
