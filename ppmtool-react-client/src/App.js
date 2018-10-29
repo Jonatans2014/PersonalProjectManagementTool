@@ -69,7 +69,7 @@ class App extends Component {
       loading: true
     });
 
-    fetchUser(this.props.history);
+    fetchUser();
     this.setState({
       authenticated: true,
       loading: false
@@ -133,6 +133,7 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route path="/profile" component={Dashboard} />
             <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
             {
@@ -161,13 +162,6 @@ class App extends Component {
                 exact
                 path="/updateProjectTask/:backlog_id/:pt_id"
                 component={UpdateProjectTask}
-              />
-
-              <PrivateRoute
-                path="/profile"
-                authenticated={this.state.authenticated}
-                currentUser={this.state.currentUser}
-                component={Profile}
               />
             </Switch>
           </div>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./Profile.css";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 import { fetchUser } from "../../../actions/Oauth2Action";
 class Profile extends Component {
@@ -9,28 +10,32 @@ class Profile extends Component {
     console.log(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    fetchUser(this.props.history);
-    this.props.fetchUser(this.props.history);
+  componentDidMount(nextProps) {
+    this.props.fetchUser();
   }
 
   render() {
+    const { validToken, user } = this.props.security;
+    console.log(user);
     return (
       <div className="profile-container">
         <div className="container">
           <div className="profile-info">
             <div className="profile-avatar">
-              <h1>state.prop</h1>
-              /> ) : (
+              <h1>Welcome</h1>
               <div className="text-avatar">
-                <span>
-                  <h2>fdfd</h2>
-                </span>
+                {validToken ? (
+                  <img src={user.imageUrl} alt={user.name} />
+                ) : (
+                  <div className="text-avatar">
+                    <span>{user.name && user.name[0]}</span>
+                  </div>
+                )}
               </div>
-              )}
             </div>
             <div className="profile-name">
-              <h2>fdfdfd</h2>
+              <h2>{user.name}</h2>
+              <p className="profile-email">{user.email}</p>
             </div>
           </div>
         </div>
@@ -39,8 +44,11 @@ class Profile extends Component {
   }
 }
 
+Profile.propTypes = {
+  security: PropTypes.object.isRequired
+};
 const mapStateToProps = state => ({
-  user: state.user
+  security: state.security
 });
 
 export default connect(

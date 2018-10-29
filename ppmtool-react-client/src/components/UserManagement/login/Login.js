@@ -33,7 +33,7 @@ class Login extends Component {
       return (
         <Redirect
           to={{
-            pathname: "/",
+            pathname: "/dashboard",
             state: { from: this.props.location }
           }}
         />

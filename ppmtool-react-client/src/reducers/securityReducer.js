@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
     case GET_OAUTH2_USERS:
       return {
         ...state,
-        authenticated: true,
+        validToken: booleanActionPayload(action.payload),
         user: action.payload
       };
 

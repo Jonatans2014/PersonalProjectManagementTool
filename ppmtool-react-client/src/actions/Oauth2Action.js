@@ -1,11 +1,16 @@
 import axios from "axios";
 import { GET_OAUTH2_USERS } from "./types";
 import { ACCESS_TOKEN, API_BASE_URL } from "../constants";
-export const fetchUser = history => async dispatch => {
+import setJWTToken from "../securityUtils/setJWTToken";
+export const fetchUser = () => async dispatch => {
   try {
-    const res = await axios.get(API_BASE_URL + "/user/me", {
-      headers: { Authorization: `Bearer ${localStorage.getItem(ACCESS_TOKEN)}` }
-    });
+    const accesToken = localStorage.getItem(ACCESS_TOKEN);
+
+    //fetch userData and setToken to header using setJWTTOKEN
+    const res = await axios.get(
+      API_BASE_URL + "/user/me",
+      setJWTToken(accesToken)
+    );
 
     console.log("this in res");
 
@@ -13,7 +18,7 @@ export const fetchUser = history => async dispatch => {
 
     dispatch({
       type: GET_OAUTH2_USERS,
-      payload: res
+      payload: res.data
     });
   } catch (err) {
     dispatch({
