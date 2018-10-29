@@ -3,6 +3,7 @@ import "./App.css";
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Layout/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AddProject from "./components/Project/AddProject";
 import UpdateProject from "./components/Project/UpdateProject";
@@ -14,7 +15,7 @@ import Register from "./components/UserManagement/Register";
 import Login from "./components/UserManagement/login/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
-import { getCurrentUser } from "./util/APIUtils";
+import LoadingIndicator from "../src/common/LoadingIndicator";
 import Alert from "react-s-alert";
 import Profile from "./components/UserManagement/profile/Profile";
 import NotFound from "../src/common/NotFound";
@@ -30,6 +31,9 @@ import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
 import PrivateRoute from "./common/PrivateRoute";
+import { getCurrentUser } from "../src/util/APIUtils";
+import { connect } from "react-redux";
+import { fetchUser } from "../src/actions/Oauth2Action";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -47,7 +51,6 @@ if (jwtToken) {
     window.location.href = "/";
   }
 }
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -64,6 +67,12 @@ class App extends Component {
   loadCurrentlyLoggedInUser() {
     this.setState({
       loading: true
+    });
+
+    fetchUser(this.props.history);
+    this.setState({
+      authenticated: true,
+      loading: false
     });
 
     getCurrentUser()
@@ -95,10 +104,22 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.loading) {
+      return <LoadingIndicator />;
+    }
     //wrap the entire our entire application with the Provider Tag and declare the store
     //add components with theirs URL.
     //when clicked on addproject, it goes to the add project component
     // and add a new proejct
+
+    /*
+    
+            <Route
+              path="/profile"
+              authenticated={this.state.authenticated}
+              currentUser={this.state.currentUser}
+              component={Profile}
+            />*/
 
     return (
       <Provider store={store}>
@@ -112,34 +133,41 @@ class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
             {
               //Private Routes
             }
             <Switch>
-              <Route exact path="/dashboard" component={Dashboard} />
-              <Route exact path="/addProject" component={AddProject} />
-              <Route
+              <SecuredRoute exact path="/dashboard" component={Dashboard} />
+              <SecuredRoute exact path="/addProject" component={AddProject} />
+              <SecuredRoute
                 exact
                 path="/updateProject/:id"
                 component={UpdateProject}
               />
 
-              <Route
-                path="/oauth2/redirect"
-                component={OAuth2RedirectHandler}
+              <SecuredRoute
+                exact
+                path="/projectBoard/:id"
+                component={ProjectBoard}
               />
-
-              <Route exact path="/projectBoard/:id" component={ProjectBoard} />
-              <Route
+              <SecuredRoute
                 exact
                 path="/addProjectTask/:id"
                 component={AddProjectTask}
               />
-              <Route
+              <SecuredRoute
                 exact
                 path="/updateProjectTask/:backlog_id/:pt_id"
                 component={UpdateProjectTask}
+              />
+
+              <PrivateRoute
+                path="/profile"
+                authenticated={this.state.authenticated}
+                currentUser={this.state.currentUser}
+                component={Profile}
               />
             </Switch>
           </div>

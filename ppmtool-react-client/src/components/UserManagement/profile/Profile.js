@@ -1,36 +1,49 @@
-import React, { Component } from 'react';
-import './Profile.css';
+import React, { Component } from "react";
+import "./Profile.css";
+import { connect } from "react-redux";
 
+import { fetchUser } from "../../../actions/Oauth2Action";
 class Profile extends Component {
-    constructor(props) {
-        super(props);
-        console.log(props);
-    }
-    render() {
-        return (
-            <div className="profile-container">
-                <div className="container">
-                    <div className="profile-info">
-                        <div className="profile-avatar">
-                            { 
-                                this.props.currentUser.imageUrl ? (
-                                    <img src={this.props.currentUser.imageUrl} alt={this.props.currentUser.name}/>
-                                ) : (
-                                    <div className="text-avatar">
-                                        <span>{this.props.currentUser.name && this.props.currentUser.name[0]}</span>
-                                    </div>
-                                )
-                            }
-                        </div>
-                        <div className="profile-name">
-                           <h2>{this.props.currentUser.name}</h2>
-                           <p className="profile-email">{this.props.currentUser.email}</p>
-                        </div>
-                    </div>
-                </div>    
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    fetchUser(this.props.history);
+    this.props.fetchUser(this.props.history);
+  }
+
+  render() {
+    return (
+      <div className="profile-container">
+        <div className="container">
+          <div className="profile-info">
+            <div className="profile-avatar">
+              <h1>state.prop</h1>
+              /> ) : (
+              <div className="text-avatar">
+                <span>
+                  <h2>fdfd</h2>
+                </span>
+              </div>
+              )}
             </div>
-        );
-    }
+            <div className="profile-name">
+              <h2>fdfdfd</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default Profile
+const mapStateToProps = state => ({
+  user: state.user
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchUser }
+)(Profile);
