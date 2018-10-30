@@ -1,87 +1,39 @@
 package com.jonatans.ppmtool.domain;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
 
 @Entity
-public class User implements UserDetails {
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    /*
-    Provides core user information.
-Implementations are not used directly by Spring Security for security purposes. They simply store user information
-which is later encapsulated into Authentication objects.
-This allows non-security related user information (such as email addresses, telephone numbers etc) to be stored in a convenient location.
-Concrete implementations must take particular care to ensure the non-null contract detailed for each method is enforced.
-See User for a reference implementation (which you might like to extend or use in your code).
-     */
+    @Column(nullable = false)
+    private String name;
 
+    @Email
+    @Column(nullable = false)
+    private String email;
 
+    private String imageUrl;
 
-    /*
-     For example if we declare a new variable it will add its entry in database. But if a variable is marked @Transient then
-      it will not be added in the database. This means it has no persistence representation in that
-     hibernate session.
-     And after an application is closed these transient objects will be destroyed through garbage collection.
-     https://www.quora.com/What-is-Transient-in-Hibernate-What-is-use-of-this
-     */
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-
-        @Email(message = "Username needs to be an email")
-        @NotBlank(message = "username is required")
-        @Column(unique = true)
-        private String username;
-        @NotBlank(message = "Please enter your full name")
-        private String fullName;
-        @NotBlank(message = "Password field is required")
-        private String password;
-        @Transient
-        private String confirmPassword;
-        private Date create_At;
-        private Date update_At;
-
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    //OneToMany with Project
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
-    private List<Project> projects = new ArrayList<>();
-
-
-    //bidirectional with user
-    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    private User user;
+    private String password;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
 
-    public User() {
-    }
+    private String providerId;
 
     public Long getId() {
         return id;
@@ -91,20 +43,36 @@ See User for a reference implementation (which you might like to extend or use i
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Boolean getEmailVerified() {
+        return emailVerified;
+    }
+
+    public void setEmailVerified(Boolean emailVerified) {
+        this.emailVerified = emailVerified;
     }
 
     public String getPassword() {
@@ -115,71 +83,19 @@ See User for a reference implementation (which you might like to extend or use i
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
+    public AuthProvider getProvider() {
+        return provider;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
     }
 
-    public Date getCreate_At() {
-        return create_At;
+    public String getProviderId() {
+        return providerId;
     }
 
-    public void setCreate_At(Date create_At) {
-        this.create_At = create_At;
-    }
-
-    public Date getUpdate_At() {
-        return update_At;
-    }
-
-    public void setUpdate_At(Date update_At) {
-        this.update_At = update_At;
-    }
-
-    @PrePersist
-    protected void onCreate(){
-        this.create_At = new Date();
-    }
-
-    @PreUpdate
-    protected void onUpdate(){
-        this.update_At = new Date();
-    }
-
-    /*
-    UserDetails interface methods
-     */
-
-    @Override
-    @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    @JsonIgnore
-    public boolean isEnabled() {
-        return true;
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
     }
 }
