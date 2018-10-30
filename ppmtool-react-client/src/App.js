@@ -3,7 +3,7 @@ import "./App.css";
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Layout/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import Alert from "react-s-alert";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AddProject from "./components/Project/AddProject";
 import UpdateProject from "./components/Project/UpdateProject";
@@ -16,7 +16,7 @@ import Login from "./components/UserManagement/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
 import LoadingIndicator from "../src/common/LoadingIndicator";
-import Alert from "react-s-alert";
+
 import Profile from "./components/UserManagement/profile/Profile";
 import NotFound from "../src/common/NotFound";
 import AppHeader from "../src/common/AppHeader";
@@ -75,20 +75,6 @@ class App extends Component {
       authenticated: true,
       loading: false
     });
-
-    getCurrentUser()
-      .then(response => {
-        this.setState({
-          currentUser: response,
-          authenticated: true,
-          loading: false
-        });
-      })
-      .catch(error => {
-        this.setState({
-          loading: false
-        });
-      });
   }
 
   handleLogout() {

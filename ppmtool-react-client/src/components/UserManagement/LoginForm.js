@@ -31,6 +31,12 @@ class LoginForm extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   handleInputChange(event) {
     /*
     const target = event.target;
@@ -52,30 +58,42 @@ class LoginForm extends Component {
     this.props.login(LoginRequest);
   }
 
+  //get error messages and retrieve on the form
   render() {
+    const { errors } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-item">
           <input
-            type="email"
-            name="username"
-            className="form-control"
+            type="text"
+            className={classnames("form-control form-control-lg", {
+              "is-invalid": errors.username
+            })}
             placeholder="Email"
+            name="username"
             value={this.state.username}
             onChange={this.handleInputChange}
             required
           />
+          {errors.username && (
+            <div className="invalid-feedback">{errors.username}</div>
+          )}
         </div>
         <div className="form-item">
           <input
             type="password"
-            name="password"
-            className="form-control"
+            className={classnames("form-control form-control-lg", {
+              "is-invalid": errors.password
+            })}
             placeholder="Password"
+            name="password"
             value={this.state.password}
             onChange={this.handleInputChange}
             required
           />
+          {errors.password && (
+            <div className="invalid-feedback">{errors.password}</div>
+          )}
         </div>
         <div className="form-item">
           <button type="submit" className="btn btn-block btn-primary">
