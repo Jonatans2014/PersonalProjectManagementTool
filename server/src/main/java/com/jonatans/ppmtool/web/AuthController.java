@@ -55,7 +55,6 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = tokenProvider.createToken(authentication);
-        System.out.println(token);
         return ResponseEntity.ok(new AuthResponse(token));
     }
 

@@ -58,6 +58,11 @@ class Landing extends Component {
           </div>
           <h1 className="home-title"> Project Management Tool</h1>
         </div>
+        <div>
+          <p className="lead">
+            Create your account to join active projects or start your own
+          </p>
+        </div>
       </div>
     );
   }

@@ -46,7 +46,7 @@ class Header extends Component {
       <div className="collapse navbar-collapse" id="mobile-nav">
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <Link className="nav-link" to="/register">
+            <Link className="nav-link" to="/signup">
               Sign Up
             </Link>
           </li>

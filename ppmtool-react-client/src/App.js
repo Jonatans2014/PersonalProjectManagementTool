@@ -15,11 +15,6 @@ import Register from "./components/UserManagement/SignUp/Register";
 import Login from "./components/UserManagement/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
-import LoadingIndicator from "../src/common/LoadingIndicator";
-import Profile from "./components/UserManagement/profile/Profile";
-import NotFound from "../src/common/NotFound";
-import AppHeader from "../src/common/AppHeader";
-
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
 //import store
@@ -29,7 +24,7 @@ import setJWTToken from "./securityUtils/setJWTToken";
 import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
-import PrivateRoute from "./common/PrivateRoute";
+
 import { getCurrentUser } from "../src/util/APIUtils";
 import { connect } from "react-redux";
 import { fetchUser } from "../src/actions/Oauth2Action";
@@ -106,9 +101,6 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <LoadingIndicator />;
-    }
     //wrap the entire our entire application with the Provider Tag and declare the store
     //add components with theirs URL.
     //when clicked on addproject, it goes to the add project component
@@ -135,12 +127,7 @@ class App extends Component {
 
             <Route exact path="/" component={Landing} />
 
-            <Route
-              path="/signup"
-              render={props => (
-                <Register authenticated={this.state.authenticated} {...props} />
-              )}
-            />
+            <Route path="/signup" render={props => <Register {...props} />} />
             <Route exact path="/login" component={Login} />
 
             <Route path="/profile" component={Dashboard} />

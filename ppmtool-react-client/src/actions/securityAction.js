@@ -48,11 +48,16 @@ export const login = LoginRequest => async dispatch => {
     const decoded = jwt_decode(accessToken);
     console.log(decoded);
     // dispatch to our securityReducer
+
+    Alert.success("You're successfully logged in!");
     dispatch({
       type: SET_CURRENT_USER,
       payload: decoded
     });
   } catch (err) {
+    Alert.error(
+      (err && err.message) || "Oops! Something went wrong. Please try again!"
+    );
     dispatch({
       type: GET_ERRORS,
       payload: " "
