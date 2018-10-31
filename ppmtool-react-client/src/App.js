@@ -11,16 +11,14 @@ import ProjectBoard from "./components/ProjectBoard/ProjectBoard";
 import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTask";
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
-import Register from "./components/UserManagement/Register";
+import Register from "./components/UserManagement/SignUp/Register";
 import Login from "./components/UserManagement/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
 import LoadingIndicator from "../src/common/LoadingIndicator";
-import Alert from "react-s-alert";
 import Profile from "./components/UserManagement/profile/Profile";
 import NotFound from "../src/common/NotFound";
 import AppHeader from "../src/common/AppHeader";
-import Signup from "../src/components/UserManagement/signup/Signup";
 
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
@@ -35,6 +33,9 @@ import PrivateRoute from "./common/PrivateRoute";
 import { getCurrentUser } from "../src/util/APIUtils";
 import { connect } from "react-redux";
 import { fetchUser } from "../src/actions/Oauth2Action";
+import Alert from "react-s-alert";
+import "react-s-alert/dist/s-alert-default.css";
+import "react-s-alert/dist/s-alert-css-effects/slide.css";
 
 const jwtToken = localStorage.jwtToken;
 
@@ -133,9 +134,15 @@ class App extends Component {
             }
 
             <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
+
+            <Route
+              path="/signup"
+              render={props => (
+                <Register authenticated={this.state.authenticated} {...props} />
+              )}
+            />
             <Route exact path="/login" component={Login} />
-            <Route path="/signup" render={props => <Signup />} />
+
             <Route path="/profile" component={Dashboard} />
             <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
@@ -167,6 +174,14 @@ class App extends Component {
                 component={UpdateProjectTask}
               />
             </Switch>
+
+            <Alert
+              stack={{ limit: 3 }}
+              timeout={3000}
+              position="top-right"
+              effect="slide"
+              offset={65}
+            />
           </div>
         </Router>
       </Provider>

@@ -3,33 +3,35 @@ import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import setJWTToken from "../securityUtils/setJWTToken";
 import jwt_decode from "jwt-decode";
 import { ACCESS_TOKEN, API_BASE_URL } from "../constants";
+import Alert from "react-s-alert";
+
 export const createNewUser = (newUser, history) => async dispatch => {
   try {
-    await axios.post("/api/users/register", newUser);
+    await axios.post(API_BASE_URL + "/auth/signup", newUser);
+
+    Alert.success("You're successfully registered. Please login to continue!");
     history.push("/login");
     dispatch({
       type: GET_ERRORS,
       payload: {}
     });
   } catch (err) {
+    Alert.err(
+      (err && err.message) || "Oops! Something went wrong. Please try again!"
+    );
+
     dispatch({
       type: GET_ERRORS,
-      payload: err.response.data
+      payload: "err.response.data"
     });
   }
 };
 
 export const login = LoginRequest => async dispatch => {
   try {
-    var myObj = new Object(),
-      str = "myString",
-      rand = Math.random(),
-      obj = new Object();
     console.log(LoginRequest);
 
-    // post => Login Request
-    // const res = await axios.post(API_BASE_URL + "/auth/login", LoginRequest);
-    //fetch userData and setToken to header using setJWTTOKEN
+    //fetch userToken
     const res = await axios.post(API_BASE_URL + "/auth/login", LoginRequest);
 
     console.log("this in res");
@@ -38,37 +40,28 @@ export const login = LoginRequest => async dispatch => {
 
     // extract token from res.data
     const { accessToken } = res.data;
-    console.log("works");
-    console.log(accessToken);
+
     // store the token in the localStorage
     localStorage.setItem(ACCESS_TOKEN, accessToken);
     const accesToken = localStorage.getItem(ACCESS_TOKEN);
-    if (!accesToken) {
-      console.log("nah");
-    } else {
-      console.log("yeeeey");
-    }
 
-    // set our token in header ***
-    //setJWTToken(token);
-    // decode token on React
-    //const decoded = jwt_decode(accessToken);
-
+    const decoded = jwt_decode(accessToken);
+    console.log(decoded);
     // dispatch to our securityReducer
     dispatch({
       type: SET_CURRENT_USER,
-      payload: "decoded"
+      payload: decoded
     });
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
-      payload: myObj
+      payload: " "
     });
   }
 };
 
 export const logout = () => dispatch => {
-  localStorage.removeItem("jwtToken");
+  localStorage.removeItem(ACCESS_TOKEN);
   setJWTToken(false);
   dispatch({
     type: SET_CURRENT_USER,
