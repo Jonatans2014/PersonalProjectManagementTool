@@ -8,7 +8,7 @@ export const fetchUser = () => async dispatch => {
 
     //fetch userData and setToken to header using setJWTTOKEN
     const res = await axios.get(
-      API_BASE_URL + "/api/users/login",
+      API_BASE_URL + "/user/me",
       setJWTToken(accesToken)
     );
 

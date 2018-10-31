@@ -18,21 +18,31 @@ public class JwtTokenProvider {
 
     //Generate the token
 
-    public String createToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    public String generateToken(Authentication authentication){
+        User user = (User)authentication.getPrincipal();
+        Date now = new Date(System.currentTimeMillis());
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + SecurityConstants.tokenExpirationMsec);
+        Date expiryDate = new Date(now.getTime()+EXPIRATION_TIME);
 
+        String userId = Long.toString(user.getId());
+
+        Map<String,Object> claims = new HashMap<>();
+        claims.put("id", (Long.toString(user.getId())));
+        claims.put("username", user.getUsername());
+        claims.put("fullName", user.getFullName());
+
+        //set subject which is our user id
+        //se claims which is information about the user that we want to include in our token
+        //we can use role as well , some developer can only read others can create
+        //then use a signature algorithm hs512
         return Jwts.builder()
-                .setSubject(Long.toString(userPrincipal.getId()))
-                .setIssuedAt(new Date())
+                .setSubject(userId)
+                .setClaims(claims)
+                .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.tokenSecret)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
-
-
 
     //Validate the token
     public boolean validateToken(String token){
@@ -55,13 +65,12 @@ public class JwtTokenProvider {
 
 
     //Get user Id from token
-    public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(SecurityConstants.tokenSecret)
-                .parseClaimsJws(token)
-                .getBody();
 
-        return Long.parseLong(claims.getSubject());
+    public Long getUserIdFromJWT(String token){
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+        String id = (String)claims.get("id");
+
+        return Long.parseLong(id);
     }
 
     //Validate the token

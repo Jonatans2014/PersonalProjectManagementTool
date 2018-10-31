@@ -16,7 +16,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.props.getProjects();
-    //this.props.fetchUser();
+    this.props.fetchUser();
   }
   render() {
     const { projects } = this.props.project;

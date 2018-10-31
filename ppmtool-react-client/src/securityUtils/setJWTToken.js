@@ -5,9 +5,9 @@ const setJWTToken = token => {
   if (token) {
     console.log("insidetoken");
 
-    axios.defaults.headers.common["Authorization"] = token;
+    axios.defaults.headers.common["Authorization"] = "Bearer " + token;
 
-    console.log(token);
+    console.log("Bearer " + token);
   } else {
     delete axios.defaults.headers.common["Authorization"];
   }

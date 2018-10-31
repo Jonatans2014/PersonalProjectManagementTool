@@ -2,23 +2,84 @@ package com.jonatans.ppmtool.web;
 
 
 import com.jonatans.ppmtool.domain.User;
-import com.jonatans.ppmtool.exception.ResourceNotFoundException;
-import com.jonatans.ppmtool.repositories.UserRepository;
-import com.jonatans.ppmtool.security.CurrentUser;
-import com.jonatans.ppmtool.security.UserPrincipal;
+import com.jonatans.ppmtool.payload.JWTLoginSucessReponse;
+import com.jonatans.ppmtool.payload.LoginRequest;
+import com.jonatans.ppmtool.security.JwtTokenProvider;
+import com.jonatans.ppmtool.services.MapValidationErrorService;
+import com.jonatans.ppmtool.services.UserService;
+import com.jonatans.ppmtool.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
+import static com.jonatans.ppmtool.security.SecurityConstants.TOKEN_PREFIX;
+
 @RestController
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private MapValidationErrorService mapValidationErrorService;
 
-    @GetMapping("/user/me")
-    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
-        return userRepository.findById(userPrincipal.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
+    //get login info and send jwt token
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, BindingResult result){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null) return errorMap;
+        System.out.println("this is " +loginRequest.getUsername()+
+                loginRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+
+
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = TOKEN_PREFIX +  tokenProvider.generateToken(authentication);
+
+        System.out.println("this is " +jwt);
+
+        return ResponseEntity.ok(new JWTLoginSucessReponse(true, jwt));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
+        // Validate passwords match
+        userValidator.validate(user,result);
+
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap != null)return errorMap;
+
+        User newUser = userService.saveUser(user);
+
+        return  new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }
 }
