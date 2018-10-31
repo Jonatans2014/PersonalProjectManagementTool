@@ -17,7 +17,7 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      email: "",
       password: "",
       errors: {}
     };
@@ -45,7 +45,7 @@ class LoginForm extends Component {
     event.preventDefault();
 
     const LoginRequest = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
 
@@ -58,10 +58,10 @@ class LoginForm extends Component {
         <div className="form-item">
           <input
             type="email"
-            name="username"
+            name="email"
             className="form-control"
             placeholder="Email"
-            value={this.state.username}
+            value={this.state.email}
             onChange={this.handleInputChange}
             required
           />
