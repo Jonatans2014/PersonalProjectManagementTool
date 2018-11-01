@@ -26,10 +26,12 @@ import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
 
 import { getCurrentUser } from "../src/util/APIUtils";
-import { connect } from "react-redux";
+
 import { fetchUser } from "../src/actions/Oauth2Action";
 import Alert from "react-s-alert";
-
+import "./App.css";
+import "react-s-alert/dist/s-alert-default.css";
+import "react-s-alert/dist/s-alert-css-effects/slide.css";
 const jwtToken = localStorage.jwtToken;
 
 if (jwtToken) {
@@ -124,6 +126,7 @@ class App extends Component {
             }
 
             <Route exact path="/" component={Landing} />
+
             <Route path="/signup" render={props => <Register {...props} />} />
             <Route exact path="/login" component={Login} />
 
