@@ -1,3 +1,4 @@
+//Reducers are used to retrieve from state
 import {
   GET_BACKLOG,
   GET_PROJECT_TASK,

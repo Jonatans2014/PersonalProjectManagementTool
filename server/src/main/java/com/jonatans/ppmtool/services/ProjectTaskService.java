@@ -2,7 +2,6 @@ package com.jonatans.ppmtool.services;
 
 
 import com.jonatans.ppmtool.domain.Backlog;
-import com.jonatans.ppmtool.domain.Project;
 import com.jonatans.ppmtool.domain.ProjectTask;
 import com.jonatans.ppmtool.exception.ProjectNotFoundException;
 import com.jonatans.ppmtool.repositories.BacklogRepository;
@@ -10,8 +9,6 @@ import com.jonatans.ppmtool.repositories.ProjectRepository;
 import com.jonatans.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProjectTaskService {
@@ -27,14 +24,14 @@ public class ProjectTaskService {
     private ProjectRepository projectRepository;
 
     @Autowired
-    private  ProjectService projectService;
+    private ProjectService projectService;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask,String username){
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String email){
 
         try {
 
             //PTs to be added to a specific project, project != null, BL exists
-            Backlog backlog =  projectService.findProjectByIdentifier(projectIdentifier, username).getBacklog(); //backlogRepository.findByProjectIdentifier(projectIdentifier);
+            Backlog backlog =  projectService.findProjectByIdentifier(projectIdentifier, email).getBacklog(); //backlogRepository.findByProjectIdentifier(projectIdentifier);
             //set the bl to pt
             System.out.println(backlog);
             projectTask.setBacklog(backlog);
@@ -72,18 +69,18 @@ public class ProjectTaskService {
 
     }
 
-    public Iterable<ProjectTask>findBacklogById(String id, String username){
+    public Iterable<ProjectTask>findBacklogById(String id, String email){
 
-        projectService.findProjectByIdentifier(id, username);
+        projectService.findProjectByIdentifier(id, email);
 
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
 
-    public ProjectTask findPTByProjectSequence(String backlog_id, String pt_id, String username){
+    public ProjectTask findPTByProjectSequence(String backlog_id, String pt_id, String email){
 
         //make sure we are searching on an existing backlog
-        projectService.findProjectByIdentifier(backlog_id, username);
+        projectService.findProjectByIdentifier(backlog_id, email);
 
 
         //make sure that our task exists
@@ -102,8 +99,8 @@ public class ProjectTaskService {
         return projectTask;
     }
 
-    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id, String username){
-        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id, username);
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id, String email){
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id, email);
 
         projectTask = updatedTask;
 
@@ -111,8 +108,8 @@ public class ProjectTaskService {
     }
 
 
-    public void deletePTByProjectSequence(String backlog_id, String pt_id, String username){
-        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id, username);
+    public void deletePTByProjectSequence(String backlog_id, String pt_id, String email){
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id, email);
         projectTaskRepository.delete(projectTask);
     }
 }

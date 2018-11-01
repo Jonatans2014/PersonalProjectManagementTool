@@ -1,4 +1,4 @@
-import { SET_CURRENT_USER } from "../actions/types";
+import { SET_CURRENT_USER, GET_OAUTH2_USERS } from "../actions/types";
 
 const initialState = {
   validToken: false,
@@ -16,6 +16,13 @@ const booleanActionPayload = payload => {
 export default function(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_USER:
+      return {
+        ...state,
+        validToken: booleanActionPayload(action.payload),
+        user: action.payload
+      };
+
+    case GET_OAUTH2_USERS:
       return {
         ...state,
         validToken: booleanActionPayload(action.payload),

@@ -1,21 +1,17 @@
-package com.jonatans.ppmtool.web;
+package com.jonatans.ppmtool.controller;
 
 
 import com.jonatans.ppmtool.domain.Project;
-import com.jonatans.ppmtool.exception.ProjectIdException;
 import com.jonatans.ppmtool.services.MapValidationErrorService;
 import com.jonatans.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
 
 /*@Controller annotation is an annotation used in Spring MVC framework (the component of Spring Framework used to implement Web Application). The @Controller annotation indicates that a particular class serves the role of a controller. The @Controller annotation acts as a stereotype for the annotated class, indicating its role. The dispatcher scans such annotated classes for

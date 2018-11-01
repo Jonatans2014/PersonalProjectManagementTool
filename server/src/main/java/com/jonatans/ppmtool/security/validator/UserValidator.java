@@ -1,14 +1,10 @@
-package com.jonatans.ppmtool.validator;
+package com.jonatans.ppmtool.security.validator;
 
 
 import com.jonatans.ppmtool.domain.User;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
-import javax.validation.ConstraintViolation;
-import java.beans.BeanDescriptor;
-import java.util.Set;
 
 @Component
 public class UserValidator implements Validator {

@@ -3,6 +3,7 @@ import "./App.css";
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Layout/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AddProject from "./components/Project/AddProject";
 import UpdateProject from "./components/Project/UpdateProject";
@@ -10,9 +11,10 @@ import ProjectBoard from "./components/ProjectBoard/ProjectBoard";
 import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTask";
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
-import Register from "./components/UserManagement/Register";
-import Login from "./components/UserManagement/Login";
-
+import Register from "./components/UserManagement/SignUp/Register";
+import Login from "./components/UserManagement/Login/Login";
+import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
+import { ACCESS_TOKEN } from "./components/constants/index";
 //The provider is used to define the store to allow us to wire react with redux
 import { Provider } from "react-redux";
 //import store
@@ -23,6 +25,13 @@ import { SET_CURRENT_USER } from "./actions/types";
 import { logout } from "./actions/securityAction";
 import SecuredRoute from "./securityUtils/SecureRoute";
 
+import { getCurrentUser } from "../src/util/APIUtils";
+
+import { fetchUser } from "../src/actions/Oauth2Action";
+import Alert from "react-s-alert";
+import "./App.css";
+import "react-s-alert/dist/s-alert-default.css";
+import "react-s-alert/dist/s-alert-css-effects/slide.css";
 const jwtToken = localStorage.jwtToken;
 
 if (jwtToken) {
@@ -39,13 +48,73 @@ if (jwtToken) {
     window.location.href = "/";
   }
 }
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      authenticated: false,
+      currentUser: null,
+      loading: false
+    };
+
+    this.loadCurrentlyLoggedInUser = this.loadCurrentlyLoggedInUser.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  loadCurrentlyLoggedInUser() {
+    this.setState({
+      loading: true
+    });
+
+    fetchUser();
+    this.setState({
+      authenticated: true,
+      loading: false
+    });
+
+    getCurrentUser()
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          authenticated: true,
+          loading: false
+        });
+      })
+      .catch(error => {
+        this.setState({
+          loading: false
+        });
+      });
+  }
+
+  handleLogout() {
+    localStorage.removeItem(ACCESS_TOKEN);
+    this.setState({
+      authenticated: false,
+      currentUser: null
+    });
+    Alert.success("You're safely logged out!");
+  }
+
+  componentDidMount() {
+    this.loadCurrentlyLoggedInUser();
+  }
+
   render() {
     //wrap the entire our entire application with the Provider Tag and declare the store
     //add components with theirs URL.
     //when clicked on addproject, it goes to the add project component
     // and add a new proejct
+
+    /*
+    
+            <Route
+              path="/profile"
+              authenticated={this.state.authenticated}
+              currentUser={this.state.currentUser}
+              component={Profile}
+            />*/
+
     return (
       <Provider store={store}>
         <Router>
@@ -53,11 +122,16 @@ class App extends Component {
             <Header />
             {
               //Public Routes
+              //check out sign render after
             }
 
             <Route exact path="/" component={Landing} />
-            <Route exact path="/register" component={Register} />
+
+            <Route path="/signup" render={props => <Register {...props} />} />
             <Route exact path="/login" component={Login} />
+
+            <Route path="/profile" component={Dashboard} />
+            <Route path="/oauth2/redirect" component={OAuth2RedirectHandler} />
 
             {
               //Private Routes
@@ -70,6 +144,7 @@ class App extends Component {
                 path="/updateProject/:id"
                 component={UpdateProject}
               />
+
               <SecuredRoute
                 exact
                 path="/projectBoard/:id"
@@ -86,6 +161,14 @@ class App extends Component {
                 component={UpdateProjectTask}
               />
             </Switch>
+
+            <Alert
+              stack={{ limit: 3 }}
+              timeout={3000}
+              position="top-right"
+              effect="slide"
+              offset={65}
+            />
           </div>
         </Router>
       </Provider>

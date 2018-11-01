@@ -11,3 +11,6 @@ export const GET_BACKLOG = "GET_BACKLOG";
 export const GET_PROJECT_TASK = "GET_PROJECT_TASK";
 export const DELETE_PROJECT_TASK = "DELETE_PROJECT_TASK";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
+
+//Type to fetch oAuth UserDetails
+export const GET_OAUTH2_USERS = "GET_OAUTH2_USERS";
