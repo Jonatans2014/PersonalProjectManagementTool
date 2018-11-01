@@ -16,7 +16,7 @@ class SocialSignup extends Component {
           title="Google"
           class="btn btn-block btn-social btn-lg btn-google-plus"
         >
-          <i class="fa fa-google-plus" /> Sign in with Google
+          <i class="fa fa-google-plus" /> Sign up with Google
         </a>
       </div>
     );
