@@ -124,7 +124,6 @@ class App extends Component {
             }
 
             <Route exact path="/" component={Landing} />
-
             <Route path="/signup" render={props => <Register {...props} />} />
             <Route exact path="/login" component={Login} />
 
