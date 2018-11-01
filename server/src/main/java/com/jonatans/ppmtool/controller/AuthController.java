@@ -1,4 +1,4 @@
-package com.jonatans.ppmtool.web;
+package com.jonatans.ppmtool.controller;
 
 
 import com.jonatans.ppmtool.domain.AuthProvider;

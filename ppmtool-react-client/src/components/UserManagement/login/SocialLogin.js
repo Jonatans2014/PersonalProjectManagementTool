@@ -1,16 +1,12 @@
 import React, { Component } from "react";
-import fbLogo from "../../../img/fb-logo.png";
+
+import { GOOGLE_AUTH_URL } from "../../constants";
 import googleLogo from "../../../img/google-logo.png";
-import githubLogo from "../../../img/github-logo.png";
-import {
-  GOOGLE_AUTH_URL,
-  FACEBOOK_AUTH_URL,
-  GITHUB_AUTH_URL
-} from "../../constants";
-class SocialSignup extends Component {
+
+class SocialLogin extends Component {
   render() {
     return (
-      <div className="social-signup">
+      <div className="social-login">
         <a
           href={GOOGLE_AUTH_URL}
           title="Google"
@@ -23,4 +19,4 @@ class SocialSignup extends Component {
   }
 }
 
-export default SocialSignup;
+export default SocialLogin;

@@ -55,9 +55,10 @@ export const login = LoginRequest => async dispatch => {
       payload: decoded
     });
   } catch (err) {
+    /*
     Alert.error(
       (err && err.message) || "Oops! Something went wrong. Please try again!"
-    );
+    );*/
     dispatch({
       type: GET_ERRORS,
       payload: " "

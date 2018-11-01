@@ -12,7 +12,7 @@ import AddProjectTask from "./components/ProjectBoard/ProjectTasks/AddProjectTas
 import UpdateProjectTask from "./components/ProjectBoard/ProjectTasks/UpdateProjectTask";
 import Landing from "./components/Layout/Landing";
 import Register from "./components/UserManagement/SignUp/Register";
-import Login from "./components/UserManagement/Login";
+import Login from "./components/UserManagement/Login/Login";
 import OAuth2RedirectHandler from "./components/UserManagement/oauth2/OAuth2RedirectHandler";
 import { ACCESS_TOKEN } from "./components/constants/index";
 //The provider is used to define the store to allow us to wire react with redux
@@ -29,8 +29,6 @@ import { getCurrentUser } from "../src/util/APIUtils";
 import { connect } from "react-redux";
 import { fetchUser } from "../src/actions/Oauth2Action";
 import Alert from "react-s-alert";
-import "react-s-alert/dist/s-alert-default.css";
-import "react-s-alert/dist/s-alert-css-effects/slide.css";
 
 const jwtToken = localStorage.jwtToken;
 

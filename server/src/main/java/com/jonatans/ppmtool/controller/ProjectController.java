@@ -1,4 +1,4 @@
-package com.jonatans.ppmtool.web;
+package com.jonatans.ppmtool.controller;
 
 
 import com.jonatans.ppmtool.domain.Project;
@@ -22,7 +22,7 @@ mapped methods and detects @RequestMapping annotations.*/
   more than adding the @Controller and
   @ResponseBody annotations (see: Javadoc)*/
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/project")
 @CrossOrigin
 public class ProjectController {
 

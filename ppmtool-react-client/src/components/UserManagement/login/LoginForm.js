@@ -2,14 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
-import { login } from "../../actions/securityAction";
+import { login } from "../../../actions/securityAction";
 
-import {
-  GOOGLE_AUTH_URL,
-  FACEBOOK_AUTH_URL,
-  GITHUB_AUTH_URL,
-  ACCESS_TOKEN
-} from "../constants";
+import { GOOGLE_AUTH_URL } from "../../constants";
 //import { login } from "../../../util/APIUtils";
 import Alert from "react-s-alert";
 
@@ -32,12 +27,6 @@ class LoginForm extends Component {
   }
 
   handleInputChange(event) {
-    /*
-    const target = event.target;
-    const inputName = target.name;
-    const inputValue = target.value;
-    */
-
     this.setState({ [event.target.name]: event.target.value });
   }
 
