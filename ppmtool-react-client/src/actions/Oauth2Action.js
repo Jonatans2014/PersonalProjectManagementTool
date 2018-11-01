@@ -7,12 +7,9 @@ export const fetchUser = () => async dispatch => {
     const accesToken = localStorage.getItem(ACCESS_TOKEN);
 
     console.log(accesToken);
-    
+
     //fetch userData and setToken to header using setJWTTOKEN
-    const res = await axios.get(
-      API_BASE_URL + "/user/me",
-      setJWTToken(accesToken)
-    );
+    const res = await axios.get("/user/me", setJWTToken(accesToken));
 
     console.log("this in res");
 

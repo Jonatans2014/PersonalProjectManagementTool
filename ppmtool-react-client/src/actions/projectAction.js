@@ -2,7 +2,8 @@
 
 import axios from "axios";
 import { GET_ERRORS, GET_PROJECTS, GET_PROJECT, DELETE_PROJECT } from "./types";
-
+import { ACCESS_TOKEN } from "../constants";
+import setJWTToken from "../securityUtils/setJWTToken";
 //async: the function will return a promise
 // await: the function will wait until there's some data returned.
 
@@ -15,7 +16,6 @@ export const createProject = (project, history) => async dispatch => {
     await axios.post("/api/project", project);
     history.push("/dashboard");
     //if ok, then dispatch nothing as a error
-
     //assign null to error when data is sent to the API
     dispatch({
       type: GET_ERRORS,
@@ -32,7 +32,12 @@ export const createProject = (project, history) => async dispatch => {
 
 //make async request to get all the projects from the api
 export const getProjects = () => async dispatch => {
-  const res = await axios.get("/api/project/all");
+  const accesToken = localStorage.getItem(ACCESS_TOKEN);
+
+  console.log("heyhey");
+  console.log(accesToken);
+
+  const res = await axios.get("/api/project/all", setJWTToken(accesToken));
   dispatch({
     type: GET_PROJECTS,
     payload: res.data

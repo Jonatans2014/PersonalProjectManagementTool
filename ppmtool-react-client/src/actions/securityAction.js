@@ -7,7 +7,7 @@ import Alert from "react-s-alert";
 
 export const createNewUser = (newUser, history) => async dispatch => {
   try {
-    await axios.post(API_BASE_URL + "/auth/signup", newUser);
+    await axios.post("/auth/signup", newUser);
 
     Alert.success("You're successfully registered. Please login to continue!");
     history.push("/login");
@@ -32,7 +32,7 @@ export const login = LoginRequest => async dispatch => {
     console.log(LoginRequest);
 
     //fetch userToken
-    const res = await axios.post(API_BASE_URL + "/auth/login", LoginRequest);
+    const res = await axios.post("/auth/login", LoginRequest);
 
     console.log("this in res");
 
